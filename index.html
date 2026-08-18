@@ -1,0 +1,2015 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>LAO | منوی کافه</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;600;700;800&amp;family=Vazirmatn:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue:#AFD8F2;
+    --blue-soft:#E4F2FB;
+    --blue-mid:#7FBBE3;
+    --blue-deep:#3E7CB1;
+    --ink:#204360;
+    --ink-soft:#5C7E97;
+    --bg:#F5FAFD;
+    --card:#FFFFFF;
+    --line:#DDEEF8;
+    --radius-lg:28px;
+    --radius-md:20px;
+    --radius-sm:14px;
+    --shadow-soft:0 10px 30px rgba(62,124,177,0.14);
+    --shadow-pop:0 4px 0 rgba(62,124,177,0.35);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Vazirmatn',sans-serif;
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.display{
+    font-family:'Baloo Bhaijaan 2',sans-serif;
+  }
+  ::selection{background:var(--blue);color:#fff;}
+
+  /* ---------- Edit trigger ---------- */
+  #editTrigger{
+    position:fixed;
+    top:18px;
+    left:18px;
+    z-index:60;
+    width:46px;
+    height:46px;
+    border-radius:50%;
+    background:#fff;
+    border:1px solid var(--line);
+    box-shadow:var(--shadow-soft);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition:transform .2s ease;
+  }
+  #editTrigger:hover{transform:translateY(-2px) scale(1.04);}
+  #editTrigger svg{width:20px;height:20px;stroke:var(--blue-deep);}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;
+    padding:64px 20px 40px;
+    text-align:center;
+    background:
+      radial-gradient(circle at 15% 10%, rgba(255,255,255,0.55), transparent 45%),
+      linear-gradient(180deg, var(--blue) 0%, var(--blue-soft) 100%);
+    border-radius:0 0 46px 46px;
+    overflow:hidden;
+  }
+  .hero::after{
+    content:"";
+    position:absolute;
+    bottom:-60px;left:50%;
+    transform:translateX(-50%);
+    width:140%;
+    height:120px;
+    background:var(--bg);
+    border-radius:50%;
+  }
+  .hero-logo{
+    position:relative;
+    z-index:2;
+    font-size:clamp(3rem,14vw,4.6rem);
+    font-weight:800;
+    letter-spacing:6px;
+    color:#fff;
+    margin:0;
+    text-shadow:
+      0 6px 0 rgba(62,124,177,0.30),
+      0 14px 24px rgba(62,124,177,0.30);
+  }
+  .hero-tagline{
+    position:relative;
+    z-index:2;
+    margin:10px 0 0;
+    font-size:1.05rem;
+    color:var(--ink-soft);
+    font-weight:500;
+  }
+
+  /* ---------- Category cards ---------- */
+  .wrap{
+    max-width:640px;
+    margin:0 auto;
+    padding:0 18px 70px;
+    position:relative;
+    z-index:3;
+  }
+  .section-label{
+    text-align:center;
+    font-size:.85rem;
+    color:var(--ink-soft);
+    letter-spacing:1px;
+    margin:8px 0 22px;
+  }
+  .cat-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius-lg);
+    margin-bottom:16px;
+    box-shadow:var(--shadow-soft);
+    overflow:hidden;
+    transition:box-shadow .25s ease;
+  }
+  .cat-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:20px 22px;
+    cursor:pointer;
+    gap:14px;
+  }
+  .cat-head h2{
+    margin:0;
+    font-size:1.35rem;
+    font-weight:700;
+    color:var(--ink);
+  }
+  .cat-count{
+    font-size:.78rem;
+    color:var(--ink-soft);
+    font-weight:500;
+    background:var(--blue-soft);
+    padding:4px 12px;
+    border-radius:20px;
+    white-space:nowrap;
+  }
+  .chevron{
+    width:18px;height:18px;
+    stroke:var(--blue-deep);
+    transition:transform .3s ease;
+    flex-shrink:0;
+  }
+  .cat-card.open .chevron{transform:rotate(180deg);}
+  .cat-body{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .35s ease;
+    border-top:0 solid var(--line);
+  }
+  .cat-card.open .cat-body{border-top:1px solid var(--line);}
+  .item-row{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:16px 22px;
+    border-bottom:1px solid var(--blue-soft);
+  }
+  .item-row:last-child{border-bottom:none;}
+  .item-thumb{
+    width:52px;height:52px;
+    border-radius:16px;
+    background:var(--blue-soft);
+    flex-shrink:0;
+    object-fit:cover;
+    background-size:cover;
+    background-position:center;
+  }
+  .item-info{flex:1;min-width:0;}
+  .item-name{
+    font-weight:600;
+    font-size:1rem;
+    color:var(--ink);
+    margin:0 0 3px;
+  }
+  .item-desc{
+    font-size:.8rem;
+    color:var(--ink-soft);
+    margin:0;
+  }
+  .item-price{
+    font-weight:700;
+    font-size:.95rem;
+    color:var(--blue-deep);
+    white-space:nowrap;
+  }
+  .empty-note{
+    padding:20px 22px;
+    color:var(--ink-soft);
+    font-size:.9rem;
+    text-align:center;
+  }
+
+  footer{
+    text-align:center;
+    color:var(--ink-soft);
+    font-size:.78rem;
+    padding:20px;
+  }
+
+  /* ---------- Modal shared ---------- */
+  .modal-overlay{
+    position:fixed;inset:0;
+    background:rgba(32,67,96,0.35);
+    backdrop-filter:blur(2px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:100;
+    padding:20px;
+  }
+  .modal-overlay.show{display:flex;}
+  .modal-box{
+    background:#fff;
+    border-radius:var(--radius-lg);
+    width:100%;
+    max-width:420px;
+    padding:28px 24px;
+    box-shadow:0 20px 60px rgba(32,67,96,0.25);
+    position:relative;
+    max-height:88vh;
+    overflow-y:auto;
+  }
+  .modal-close{
+    position:absolute;
+    top:16px; left:16px;
+    width:32px;height:32px;
+    border-radius:50%;
+    border:none;
+    background:var(--blue-soft);
+    color:var(--blue-deep);
+    cursor:pointer;
+    font-size:16px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .modal-title{
+    margin:0 0 6px;
+    font-size:1.3rem;
+    font-weight:700;
+    text-align:center;
+  }
+  .modal-sub{
+    text-align:center;
+    color:var(--ink-soft);
+    font-size:.85rem;
+    margin:0 0 20px;
+  }
+  .field{margin-bottom:14px;}
+  .field label{
+    display:block;
+    font-size:.82rem;
+    color:var(--ink-soft);
+    margin-bottom:6px;
+    font-weight:500;
+  }
+  .field input, .field textarea{
+    width:100%;
+    padding:12px 14px;
+    border-radius:var(--radius-sm);
+    border:1px solid var(--line);
+    background:var(--blue-soft);
+    font-family:'Vazirmatn',sans-serif;
+    font-size:.92rem;
+    color:var(--ink);
+    outline:none;
+  }
+  .field input:focus, .field textarea:focus{border-color:var(--blue-mid);}
+  .btn{
+    width:100%;
+    padding:13px;
+    border-radius:var(--radius-sm);
+    border:none;
+    background:var(--blue-deep);
+    color:#fff;
+    font-family:'Vazirmatn',sans-serif;
+    font-weight:700;
+    font-size:.95rem;
+    cursor:pointer;
+    box-shadow:0 4px 0 #2c5f89;
+    transition:transform .15s ease;
+  }
+  .btn:active{transform:translateY(2px);box-shadow:0 2px 0 #2c5f89;}
+  .btn.ghost{
+    background:var(--blue-soft);
+    color:var(--blue-deep);
+    box-shadow:none;
+    margin-top:8px;
+  }
+  .btn.danger{
+    background:#fbe6e6;
+    color:#c94b4b;
+    box-shadow:none;
+  }
+  .error-msg{
+    color:#c94b4b;
+    font-size:.82rem;
+    text-align:center;
+    margin:-6px 0 12px;
+    min-height:16px;
+  }
+
+  /* ---------- Admin dashboard ---------- */
+  #adminModal .modal-box{max-width:520px;text-align:right;}
+  .admin-top{
+    display:flex;justify-content:space-between;align-items:center;
+    margin-bottom:16px;
+  }
+  .admin-cat-block{
+    border:1px solid var(--line);
+    border-radius:var(--radius-md);
+    padding:14px;
+    margin-bottom:16px;
+    background:var(--blue-soft);
+  }
+  .admin-cat-block .field input{background:#fff;}
+  .admin-item-block{
+    background:#fff;
+    border-radius:var(--radius-sm);
+    padding:12px;
+    margin-bottom:10px;
+    border:1px solid var(--line);
+  }
+  .admin-item-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+  }
+  .thumb-preview{
+    width:44px;height:44px;
+    border-radius:12px;
+    object-fit:cover;
+    background:var(--blue-soft);
+    flex-shrink:0;
+  }
+  .row-between{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+  }
+  .small-btn{
+    border:none;
+    background:#fbe6e6;
+    color:#c94b4b;
+    font-size:.75rem;
+    padding:6px 10px;
+    border-radius:10px;
+    cursor:pointer;
+    font-family:'Vazirmatn',sans-serif;
+  }
+  .file-btn{
+    display:inline-block;
+    font-size:.75rem;
+    color:var(--blue-deep);
+    background:var(--blue-soft);
+    padding:6px 10px;
+    border-radius:10px;
+    cursor:pointer;
+    text-align:center;
+  }
+  .file-btn input{display:none;}
+  .divider{
+    border:none;border-top:1px dashed var(--line);
+    margin:18px 0;
+  }
+  .toast{
+    position:fixed;
+    bottom:24px;left:50%;
+    transform:translateX(-50%) translateY(20px);
+    background:var(--ink);
+    color:#fff;
+    padding:12px 20px;
+    border-radius:16px;
+    font-size:.85rem;
+    opacity:0;
+    pointer-events:none;
+    transition:all .3s ease;
+    z-index:200;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+  <!-- Floating edit trigger -->
+  <div id="editTrigger" title="ورود مدیریت">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 20h9"></path>
+      <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path>
+    </svg>
+  </div>
+
+  <!-- Hero -->
+  <div class="hero">
+    <h1 class="hero-logo">LAO</h1>
+    <p class="hero-tagline">منوی کافه</p>
+  </div>
+
+  <div class="wrap">
+    <p class="section-label">برای دیدن هر بخش، روی آن ضربه بزنید</p>
+    <div id="categoryList"><div class="cat-card" data-id="c_mi0ksq7"><div class="cat-head">
+      <h2>بار گرم "قهوه"</h2>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="cat-count">10 آیتم</span>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg>
+      </div></div><div class="cat-body"><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">اسپرسو ربوستا</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">اسپرسو عربیکا</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">لته</p>
+            <p class="item-desc">اگه خواستی شیرین بشه سیروپ دلخواهتو انتخاب کن</p>
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">کاپوچینو </p>
+            <p class="item-desc">اگه خواستی شیرین بشه سیروپ دلخواهتو انتخاب کن</p>
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">ماکیاتو</p>
+            <p class="item-desc">اگه خواستی شیرین بشه سیروپ دلخواهتو انتخاب کن</p>
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">کورتادو </p>
+            <p class="item-desc">اگه خواستی شیرین بشه سیروپ دلخواهتو انتخاب کن</p>
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">کم پانا </p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">امریکانو</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">آیریش </p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">فلت وایت </p>
+            <p class="item-desc">اگه خواستی شیرین بشه سیروپ دلخواهتو انتخاب کن</p>
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div></div></div><div class="cat-card" data-id="c_uo1iufo"><div class="cat-head">
+      <h2>بار گرم "بدون قهوه"</h2>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="cat-count">7 آیتم</span>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg>
+      </div></div><div class="cat-body"><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">هات ویفر</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">هات چاکلت </p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">وایت چاکلت</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">ماسالا</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">شیر پسته زعفران </p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">هات نوتلا</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">هات لوتوس</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div></div></div><div class="cat-card" data-id="c_6dpmwpf"><div class="cat-head">
+      <h2>بار سرد "قهوه"</h2>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="cat-count">9 آیتم</span>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg>
+      </div></div><div class="cat-body"><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">ایس لته </p>
+            <p class="item-desc">اگه خواستی شیرین بشه سیروپ دلخواهتو انتخاب کن</p>
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">ایس کاپو</p>
+            <p class="item-desc">اگه خواستی شیرین بشه سیروپ دلخواهتو انتخاب کن</p>
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">اورنج اسپرسو</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">هلو اسپرسو </p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">سیب اسپرسو</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">موز اسپرسو</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">ایس لته ایران</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">افوگاتو</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">فراپاچینو</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div></div></div><div class="cat-card" data-id="c_cs1k9r8"><div class="cat-head">
+      <h2>بار سرد "بدون قهوه" </h2>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="cat-count">11 آیتم</span>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg>
+      </div></div><div class="cat-body"><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">موهیتو </p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">موهیتو استوایی </p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">لیموناد</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">رد موهیتو</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">لیمو انبه </p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">شیر هویج هندی </p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">ایس چاکلت</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">کوکا یامی</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">ادامس یخی</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">ابجو</p>
+            <p class="item-desc">بدون الکل </p>
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">ایس تی</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div></div></div><div class="cat-card" data-id="c_y0lbc9p"><div class="cat-head">
+      <h2>دمنوش</h2>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="cat-count">3 آیتم</span>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg>
+      </div></div><div class="cat-body"><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">چای سیاه</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">چای ترش</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">چای سبز</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div></div></div><div class="cat-card" data-id="c_2q1pi25"><div class="cat-head">
+      <h2>قهوه دمی</h2>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="cat-count">3 آیتم</span>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg>
+      </div></div><div class="cat-body"><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">فرانسه</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">V 60</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">کلد برو "سرد دم"</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div></div></div><div class="cat-card" data-id="c_1japwvi"><div class="cat-head">
+      <h2>آیتم های شرقی</h2>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="cat-count">3 آیتم</span>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg>
+      </div></div><div class="cat-body"><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">ماچا</p>
+            <p class="item-desc">اگه خواستی شیرین بشه سیروپ دلخواهتو انتخاب کن</p>
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">اسپیرولینا</p>
+            <p class="item-desc">اگه خواستی شیرین بشه سیروپ دلخواهتو انتخاب کن</p>
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">اوبه</p>
+            <p class="item-desc">اگه خواستی شیرین بشه سیروپ دلخواهتو انتخاب کن</p>
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div></div></div><div class="cat-card" data-id="c_98jnldx"><div class="cat-head">
+      <h2>میلک شیک</h2>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="cat-count">6 آیتم</span>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg>
+      </div></div><div class="cat-body"><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">نوتلا</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">شکلات</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">انبه</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">توت فرنگی</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">لوتوس</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">روز</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div></div></div><div class="cat-card" data-id="c_a260okm"><div class="cat-head">
+      <h2>دسر</h2>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="cat-count">6 آیتم</span>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg>
+      </div></div><div class="cat-body"><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">چیز کیک</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">کوکی</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">شکلات پسته</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">تریپل چاکلت</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">سه شیر</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">تیرامیسو </p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div></div></div><div class="cat-card" data-id="c_ylifr5f"><div class="cat-head">
+      <h2>"Side"</h2>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="cat-count">5 آیتم</span>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg>
+      </div></div><div class="cat-body"><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">موز</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">لیوان یخ</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">اسکوپ بستنی</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">شیر فندق</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">شیر بادام</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div></div></div><div class="cat-card" data-id="c_6umzutg"><div class="cat-head">
+      <h2>سیوپ </h2>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="cat-count">5 آیتم</span>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg>
+      </div></div><div class="cat-body"><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">وانیل</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">فندق</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">شکلات </p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">کارامل</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">نارگیل</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div></div></div><div class="cat-card" data-id="c_ygcxfuu"><div class="cat-head">
+      <h2>آیتم های ورزشی</h2>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="cat-count">5 آیتم</span>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg>
+      </div></div><div class="cat-body"><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">شیک پروتئینی</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">شیر موز</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">وی اسپیرولینا</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">فراپه پروتئینی</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div><div class="item-row">
+          <div class="item-thumb" style=""></div>
+          <div class="item-info">
+            <p class="item-name">پروتئین بار</p>
+            
+          </div>
+          <div class="item-price">۰ تومان</div>
+        </div></div></div></div>
+  </div>
+
+  <footer>ساخته‌شده برای LAO</footer>
+  <div class="toast" id="toast"></div>
+
+  <!-- Login Modal -->
+  <div class="modal-overlay" id="loginModal">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal('loginModal')">✕</button>
+      <h3 class="modal-title">ورود مدیریت</h3>
+      <p class="modal-sub">برای ویرایش منو وارد شوید</p>
+      <div class="field">
+        <label>نام کاربری</label>
+        <input type="text" id="loginUser" autocomplete="off" placeholder="نام کاربری">
+      </div>
+      <div class="field">
+        <label>رمز عبور</label>
+        <input type="password" id="loginPass" placeholder="رمز عبور">
+      </div>
+      <p class="error-msg" id="loginError"></p>
+      <button class="btn" onclick="tryLogin()">ورود</button>
+    </div>
+  </div>
+
+  <!-- Admin Modal -->
+  <div class="modal-overlay" id="adminModal">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeAdmin()">✕</button>
+      <div class="admin-top">
+        <h3 class="modal-title" style="margin:0;">پنل ویرایش منو</h3>
+      </div>
+      <p class="modal-sub" style="margin-top:0;">تغییرات بلافاصله ذخیره می‌شوند</p>
+
+      <div id="adminCategories"><div class="admin-cat-block"><div class="field"><label>نام دسته‌بندی</label><input type="text"></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><button class="btn ghost" style="margin-top: 4px;">+ افزودن آیتم</button><button class="small-btn" style="margin-top: 10px;">حذف این دسته‌بندی</button></div><div class="admin-cat-block"><div class="field"><label>نام دسته‌بندی</label><input type="text"></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><button class="btn ghost" style="margin-top: 4px;">+ افزودن آیتم</button><button class="small-btn" style="margin-top: 10px;">حذف این دسته‌بندی</button></div><div class="admin-cat-block"><div class="field"><label>نام دسته‌بندی</label><input type="text"></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><button class="btn ghost" style="margin-top: 4px;">+ افزودن آیتم</button><button class="small-btn" style="margin-top: 10px;">حذف این دسته‌بندی</button></div><div class="admin-cat-block"><div class="field"><label>نام دسته‌بندی</label><input type="text"></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><button class="btn ghost" style="margin-top: 4px;">+ افزودن آیتم</button><button class="small-btn" style="margin-top: 10px;">حذف این دسته‌بندی</button></div><div class="admin-cat-block"><div class="field"><label>نام دسته‌بندی</label><input type="text"></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><button class="btn ghost" style="margin-top: 4px;">+ افزودن آیتم</button><button class="small-btn" style="margin-top: 10px;">حذف این دسته‌بندی</button></div><div class="admin-cat-block"><div class="field"><label>نام دسته‌بندی</label><input type="text"></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><button class="btn ghost" style="margin-top: 4px;">+ افزودن آیتم</button><button class="small-btn" style="margin-top: 10px;">حذف این دسته‌بندی</button></div><div class="admin-cat-block"><div class="field"><label>نام دسته‌بندی</label><input type="text"></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><button class="btn ghost" style="margin-top: 4px;">+ افزودن آیتم</button><button class="small-btn" style="margin-top: 10px;">حذف این دسته‌بندی</button></div><div class="admin-cat-block"><div class="field"><label>نام دسته‌بندی</label><input type="text"></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><button class="btn ghost" style="margin-top: 4px;">+ افزودن آیتم</button><button class="small-btn" style="margin-top: 10px;">حذف این دسته‌بندی</button></div><div class="admin-cat-block"><div class="field"><label>نام دسته‌بندی</label><input type="text"></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><button class="btn ghost" style="margin-top: 4px;">+ افزودن آیتم</button><button class="small-btn" style="margin-top: 10px;">حذف این دسته‌بندی</button></div><div class="admin-cat-block"><div class="field"><label>نام دسته‌بندی</label><input type="text"></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><button class="btn ghost" style="margin-top: 4px;">+ افزودن آیتم</button><button class="small-btn" style="margin-top: 10px;">حذف این دسته‌بندی</button></div><div class="admin-cat-block"><div class="field"><label>نام دسته‌بندی</label><input type="text"></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><button class="btn ghost" style="margin-top: 4px;">+ افزودن آیتم</button><button class="small-btn" style="margin-top: 10px;">حذف این دسته‌بندی</button></div><div class="admin-cat-block"><div class="field"><label>نام دسته‌بندی</label><input type="text"></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><button class="btn ghost" style="margin-top: 4px;">+ افزودن آیتم</button><button class="small-btn" style="margin-top: 10px;">حذف این دسته‌بندی</button></div><div class="admin-cat-block"><div class="field"><label>نام دسته‌بندی</label><input type="text"></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><div class="admin-item-block"><div class="row-between" style="margin-bottom: 8px;"><div style="display: flex; align-items: center; gap: 8px;"><div class="thumb-preview" style="background-size: cover; background-position: center center;"></div><label class="file-btn">انتخاب عکس<input type="file" accept="image/*"></label></div><button class="small-btn">حذف آیتم</button></div><div class="admin-item-grid"><div class="field"><label>نام آیتم</label><input type="text"></div><div class="field"><label>قیمت (تومان)</label><input type="text" inputmode="numeric"></div></div><div class="field" style="margin-top: 4px;"><label>توضیح کوتاه (اختیاری)</label><input type="text"></div></div><button class="btn ghost" style="margin-top: 4px;">+ افزودن آیتم</button><button class="small-btn" style="margin-top: 10px;">حذف این دسته‌بندی</button></div></div>
+
+      <button class="btn ghost" onclick="addCategory()">+ افزودن دسته‌بندی جدید</button>
+      <hr class="divider">
+      <button class="btn" onclick="exportFile()">⬇ دانلود فایل به‌روزشده</button>
+      <p class="modal-sub" style="margin:8px 0 0;">این فایل رو به جای فایل قبلی بفرست تا همه تغییراتت رو ببینن</p>
+      <hr class="divider">
+      <button class="btn danger" onclick="logoutAdmin()">خروج از حساب مدیریت</button>
+    </div>
+  </div>
+
+<script>
+/* ================= DATA ================= */
+const STORAGE_KEY = 'laoMenuData_v1';
+const AUTH_KEY = 'laoAdminSession';
+const ADMIN_USER = 'yasin';
+const ADMIN_PASS = '4228';
+
+const defaultData = /*DEFAULT_DATA_START*/{
+  "categories": [
+    {
+      "id": "c_mi0ksq7",
+      "name": "بار گرم \"قهوه\"",
+      "items": [
+        {
+          "id": "i_v4f3eqt",
+          "name": "اسپرسو ربوستا",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_ft5c4q0",
+          "name": "اسپرسو عربیکا",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_x28qnzr",
+          "name": "لته",
+          "price": "0",
+          "desc": "اگه خواستی شیرین بشه سیروپ دلخواهتو انتخاب کن",
+          "image": ""
+        },
+        {
+          "id": "i_hh8icpx",
+          "name": "کاپوچینو ",
+          "price": "0",
+          "desc": "اگه خواستی شیرین بشه سیروپ دلخواهتو انتخاب کن",
+          "image": ""
+        },
+        {
+          "id": "i_jd7ocza",
+          "name": "ماکیاتو",
+          "price": "0",
+          "desc": "اگه خواستی شیرین بشه سیروپ دلخواهتو انتخاب کن",
+          "image": ""
+        },
+        {
+          "id": "i_cagb9u9",
+          "name": "کورتادو ",
+          "price": "0",
+          "desc": "اگه خواستی شیرین بشه سیروپ دلخواهتو انتخاب کن",
+          "image": ""
+        },
+        {
+          "id": "i_6apbrnh",
+          "name": "کم پانا ",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_uvdsgr2",
+          "name": "امریکانو",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_bxf3wjl",
+          "name": "آیریش ",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_80ej50n",
+          "name": "فلت وایت ",
+          "price": "0",
+          "desc": "اگه خواستی شیرین بشه سیروپ دلخواهتو انتخاب کن",
+          "image": ""
+        }
+      ]
+    },
+    {
+      "id": "c_uo1iufo",
+      "name": "بار گرم \"بدون قهوه\"",
+      "items": [
+        {
+          "id": "i_ngn9rvk",
+          "name": "هات ویفر",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_cg6d52v",
+          "name": "هات چاکلت ",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_xv8rewk",
+          "name": "وایت چاکلت",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_hqqc7ws",
+          "name": "ماسالا",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_20li7ur",
+          "name": "شیر پسته زعفران ",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_pvfs2d5",
+          "name": "هات نوتلا",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_722swgu",
+          "name": "هات لوتوس",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        }
+      ]
+    },
+    {
+      "id": "c_6dpmwpf",
+      "name": "بار سرد \"قهوه\"",
+      "items": [
+        {
+          "id": "i_m5wxfq0",
+          "name": "ایس لته ",
+          "price": "0",
+          "desc": "اگه خواستی شیرین بشه سیروپ دلخواهتو انتخاب کن",
+          "image": ""
+        },
+        {
+          "id": "i_3vv3z6l",
+          "name": "ایس کاپو",
+          "price": "0",
+          "desc": "اگه خواستی شیرین بشه سیروپ دلخواهتو انتخاب کن",
+          "image": ""
+        },
+        {
+          "id": "i_v4jf2o3",
+          "name": "اورنج اسپرسو",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_es46b2l",
+          "name": "هلو اسپرسو ",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_b3nfz6q",
+          "name": "سیب اسپرسو",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_3wwc02g",
+          "name": "موز اسپرسو",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_7qyqs1b",
+          "name": "ایس لته ایران",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_6jcg55c",
+          "name": "افوگاتو",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_2olzsqe",
+          "name": "فراپاچینو",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_p09dnlo",
+          "name": "ایس آمریکانو",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        }
+      ]
+    },
+    {
+      "id": "c_cs1k9r8",
+      "name": "بار سرد \"بدون قهوه\" ",
+      "items": [
+        {
+          "id": "i_k8u74jg",
+          "name": "موهیتو ",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_bjm40qu",
+          "name": "موهیتو استوایی ",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_k5lzb61",
+          "name": "لیموناد",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_8wv4hcj",
+          "name": "رد موهیتو",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_092hv0z",
+          "name": "لیمو انبه ",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_oxii0zn",
+          "name": "شیر هویج هندی ",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_t3bnuk5",
+          "name": "ایس چاکلت",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_2w2dh49",
+          "name": "کوکا یامی",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_iseie4q",
+          "name": "ادامس یخی",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_xrhqe90",
+          "name": "ابجو",
+          "price": "0",
+          "desc": "بدون الکل ",
+          "image": ""
+        },
+        {
+          "id": "i_edtf7zs",
+          "name": "ایس تی",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        }
+      ]
+    },
+    {
+      "id": "c_y0lbc9p",
+      "name": "دمنوش",
+      "items": [
+        {
+          "id": "i_axpefec",
+          "name": "چای سیاه",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_6ei6fbi",
+          "name": "چای ترش",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_l6hcxne",
+          "name": "چای سبز",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        }
+      ]
+    },
+    {
+      "id": "c_2q1pi25",
+      "name": "قهوه دمی",
+      "items": [
+        {
+          "id": "i_4lf2x39",
+          "name": "فرانسه",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_tbwdbg3",
+          "name": "V 60",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_uxsuwre",
+          "name": "کلد برو \"سرد دم\"",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        }
+      ]
+    },
+    {
+      "id": "c_1japwvi",
+      "name": "آیتم های شرقی",
+      "items": [
+        {
+          "id": "i_rv0j0te",
+          "name": "ماچا",
+          "price": "0",
+          "desc": "اگه خواستی شیرین بشه سیروپ دلخواهتو انتخاب کن",
+          "image": ""
+        },
+        {
+          "id": "i_zjfm80h",
+          "name": "اسپیرولینا",
+          "price": "0",
+          "desc": "اگه خواستی شیرین بشه سیروپ دلخواهتو انتخاب کن",
+          "image": ""
+        },
+        {
+          "id": "i_8yz63ww",
+          "name": "اوبه",
+          "price": "0",
+          "desc": "اگه خواستی شیرین بشه سیروپ دلخواهتو انتخاب کن",
+          "image": ""
+        }
+      ]
+    },
+    {
+      "id": "c_98jnldx",
+      "name": "میلک شیک",
+      "items": [
+        {
+          "id": "i_myu8zlc",
+          "name": "نوتلا",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_c65wtg6",
+          "name": "شکلات",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_ud8rngs",
+          "name": "انبه",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_apvua85",
+          "name": "توت فرنگی",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_k31dlx1",
+          "name": "لوتوس",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_i37q5fa",
+          "name": "بادام زمینی ",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_ek9ie4z",
+          "name": "روز",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        }
+      ]
+    },
+    {
+      "id": "c_a260okm",
+      "name": "دسر",
+      "items": [
+        {
+          "id": "i_uigs3fd",
+          "name": "چیز کیک",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_ha80wer",
+          "name": "کوکی",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_uu6099d",
+          "name": "شکلات پسته",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_5w9fz5d",
+          "name": "تریپل چاکلت",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_3ueda8z",
+          "name": "سه شیر",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_qmmrej5",
+          "name": "تیرامیسو ",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        }
+      ]
+    },
+    {
+      "id": "c_ylifr5f",
+      "name": "\"Side\"",
+      "items": [
+        {
+          "id": "i_tedn2ko",
+          "name": "موز",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_oyfpj2z",
+          "name": "لیوان یخ",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_10k9ixd",
+          "name": "اسکوپ بستنی",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_jashn93",
+          "name": "شیر فندق",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_ihvbbxi",
+          "name": "شیر بادام",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        }
+      ]
+    },
+    {
+      "id": "c_6umzutg",
+      "name": "سیروپ ",
+      "items": [
+        {
+          "id": "i_giiaak2",
+          "name": "وانیل",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_yf588cu",
+          "name": "فندق",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_vgzqlnf",
+          "name": "شکلات ",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_bugegma",
+          "name": "کارامل",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_ec2s5fd",
+          "name": "نارگیل",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        }
+      ]
+    },
+    {
+      "id": "c_ygcxfuu",
+      "name": "آیتم های ورزشی",
+      "items": [
+        {
+          "id": "i_wf3yk07",
+          "name": "شیک پروتئینی",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_uvxp3rw",
+          "name": "شیر موز",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_5jlp6oh",
+          "name": "وی اسپیرولینا",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_nitpasj",
+          "name": "فراپه پروتئینی",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_hb8hlim",
+          "name": "پروتئین بار",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        }
+      ]
+    },
+    {
+      "id": "c_01xx7o6",
+      "name": "سرد نوش ایرانی ",
+      "items": [
+        {
+          "id": "i_t4uinuf",
+          "name": "زعفران ",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_4sxeyjk",
+          "name": "بیدمشک ",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_pu1oy3b",
+          "name": "به‌لیمو",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        },
+        {
+          "id": "i_mcvsq9m",
+          "name": "بهار نارنج ",
+          "price": "0",
+          "desc": "",
+          "image": ""
+        }
+      ]
+    }
+  ]
+}/*DEFAULT_DATA_END*/;
+
+function cid(){ return 'c_' + Math.random().toString(36).slice(2,9); }
+function iid(){ return 'i_' + Math.random().toString(36).slice(2,9); }
+
+const SOURCE_FINGERPRINT_KEY = 'laoMenuData_v1_src';
+
+function loadData(){
+  const currentSourceStr = JSON.stringify(defaultData);
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    const storedFingerprint = localStorage.getItem(SOURCE_FINGERPRINT_KEY);
+    // فقط وقتی داده‌ی ذخیره‌شده رو مرورگر معتبره که متعلق به همین نسخه از فایل باشه
+    // (یعنی از دفعه‌ی قبل که همین فایل رو باز کرده بودیم، ویرایشی مونده که هنوز دانلود نشده)
+    if(raw && storedFingerprint === currentSourceStr) return JSON.parse(raw);
+  }catch(e){}
+  // یا اولین بارریه، یا این یه نسخه‌ی تازه‌تر/متفاوت از فایلیه که قبلاً باز شده بود
+  // در هر دو حالت، دیتای همین فایل (defaultData) باید مرجع اصلی باشه
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultData));
+  localStorage.setItem(SOURCE_FINGERPRINT_KEY, currentSourceStr);
+  return JSON.parse(JSON.stringify(defaultData));
+}
+function saveData(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+let data = loadData();
+
+/* ================= PUBLIC MENU RENDER ================= */
+function formatPrice(p){
+  const n = parseInt((p||'0').toString().replace(/[^\d]/g,''),10) || 0;
+  return n.toLocaleString('fa-IR') + ' تومان';
+}
+
+function renderMenu(){
+  const list = document.getElementById('categoryList');
+  list.innerHTML = '';
+  if(!data.categories.length){
+    list.innerHTML = '<p class="empty-note">هنوز دسته‌بندی‌ای اضافه نشده است.</p>';
+    return;
+  }
+  data.categories.forEach((cat, idx) => {
+    const card = document.createElement('div');
+    card.className = 'cat-card';
+    card.dataset.id = cat.id;
+
+    const head = document.createElement('div');
+    head.className = 'cat-head';
+    head.innerHTML = `
+      <h2>${escapeHtml(cat.name)}</h2>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="cat-count">${cat.items.length} آیتم</span>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </div>`;
+    head.onclick = () => toggleCategory(card);
+
+    const body = document.createElement('div');
+    body.className = 'cat-body';
+
+    if(!cat.items.length){
+      body.innerHTML = '<p class="empty-note">آیتمی در این دسته وجود ندارد.</p>';
+    }else{
+      cat.items.forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'item-row';
+        const thumbStyle = item.image ? `background-image:url('${item.image}')` : '';
+        row.innerHTML = `
+          <div class="item-thumb" style="${thumbStyle}"></div>
+          <div class="item-info">
+            <p class="item-name">${escapeHtml(item.name)}</p>
+            ${item.desc ? `<p class="item-desc">${escapeHtml(item.desc)}</p>` : ''}
+          </div>
+          <div class="item-price">${formatPrice(item.price)}</div>
+        `;
+        body.appendChild(row);
+      });
+    }
+
+    card.appendChild(head);
+    card.appendChild(body);
+    list.appendChild(card);
+  });
+}
+
+function toggleCategory(card){
+  const wasOpen = card.classList.contains('open');
+  document.querySelectorAll('.cat-card.open').forEach(c => {
+    c.classList.remove('open');
+    c.querySelector('.cat-body').style.maxHeight = null;
+  });
+  if(!wasOpen){
+    card.classList.add('open');
+    const body = card.querySelector('.cat-body');
+    body.style.maxHeight = body.scrollHeight + 'px';
+  }
+}
+
+function escapeHtml(str){
+  return (str||'').toString()
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+/* ================= AUTH ================= */
+document.getElementById('editTrigger').onclick = () => {
+  if(sessionStorage.getItem(AUTH_KEY) === '1'){
+    openAdmin();
+  }else{
+    openModal('loginModal');
+    document.getElementById('loginUser').value = '';
+    document.getElementById('loginPass').value = '';
+    document.getElementById('loginError').textContent = '';
+  }
+};
+
+function tryLogin(){
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPass').value.trim();
+  if(u === ADMIN_USER && p === ADMIN_PASS){
+    sessionStorage.setItem(AUTH_KEY, '1');
+    closeModal('loginModal');
+    openAdmin();
+  }else{
+    document.getElementById('loginError').textContent = 'نام کاربری یا رمز عبور اشتباه است';
+  }
+}
+
+function logoutAdmin(){
+  sessionStorage.removeItem(AUTH_KEY);
+  closeAdmin();
+  showToast('از حساب مدیریت خارج شدید');
+}
+
+/* ================= MODAL HELPERS ================= */
+function openModal(id){ document.getElementById(id).classList.add('show'); }
+function closeModal(id){ document.getElementById(id).classList.remove('show'); }
+
+/* ================= ADMIN PANEL ================= */
+function openAdmin(){
+  renderAdmin();
+  openModal('adminModal');
+}
+function closeAdmin(){
+  closeModal('adminModal');
+  renderMenu();
+}
+
+function renderAdmin(){
+  const wrap = document.getElementById('adminCategories');
+  wrap.innerHTML = '';
+
+  data.categories.forEach(cat => {
+    const block = document.createElement('div');
+    block.className = 'admin-cat-block';
+
+    const nameField = document.createElement('div');
+    nameField.className = 'field';
+    nameField.innerHTML = `<label>نام دسته‌بندی</label>`;
+    const nameInput = document.createElement('input');
+    nameInput.type = 'text';
+    nameInput.value = cat.name;
+    nameInput.oninput = () => { cat.name = nameInput.value; saveData(); };
+    nameField.appendChild(nameInput);
+    block.appendChild(nameField);
+
+    // items
+    cat.items.forEach(item => {
+      block.appendChild(buildItemBlock(cat, item));
+    });
+
+    const addItemBtn = document.createElement('button');
+    addItemBtn.className = 'btn ghost';
+    addItemBtn.style.marginTop = '4px';
+    addItemBtn.textContent = '+ افزودن آیتم';
+    addItemBtn.onclick = () => {
+      cat.items.push({ id: iid(), name: 'آیتم جدید', price: '0', desc: '', image: '' });
+      saveData();
+      renderAdmin();
+    };
+    block.appendChild(addItemBtn);
+
+    const delCatBtn = document.createElement('button');
+    delCatBtn.className = 'small-btn';
+    delCatBtn.style.marginTop = '10px';
+    delCatBtn.textContent = 'حذف این دسته‌بندی';
+    delCatBtn.onclick = () => {
+      if(confirm('این دسته‌بندی و همه آیتم‌های آن حذف شود؟')){
+        data.categories = data.categories.filter(c => c.id !== cat.id);
+        saveData();
+        renderAdmin();
+      }
+    };
+    block.appendChild(delCatBtn);
+
+    wrap.appendChild(block);
+  });
+}
+
+function buildItemBlock(cat, item){
+  const box = document.createElement('div');
+  box.className = 'admin-item-block';
+
+  const top = document.createElement('div');
+  top.className = 'row-between';
+  top.style.marginBottom = '8px';
+
+  const thumb = document.createElement('div');
+  thumb.className = 'thumb-preview';
+  if(item.image) thumb.style.backgroundImage = `url('${item.image}')`;
+  thumb.style.backgroundSize = 'cover';
+  thumb.style.backgroundPosition = 'center';
+
+  const fileLabel = document.createElement('label');
+  fileLabel.className = 'file-btn';
+  fileLabel.textContent = 'انتخاب عکس';
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.accept = 'image/*';
+  fileInput.onchange = (e) => {
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      item.image = reader.result;
+      thumb.style.backgroundImage = `url('${item.image}')`;
+      saveData();
+      showToast('عکس ذخیره شد');
+    };
+    reader.readAsDataURL(file);
+  };
+  fileLabel.appendChild(fileInput);
+
+  const delBtn = document.createElement('button');
+  delBtn.className = 'small-btn';
+  delBtn.textContent = 'حذف آیتم';
+  delBtn.onclick = () => {
+    cat.items = cat.items.filter(i => i.id !== item.id);
+    saveData();
+    renderAdmin();
+  };
+
+  const leftGroup = document.createElement('div');
+  leftGroup.style.display = 'flex';
+  leftGroup.style.alignItems = 'center';
+  leftGroup.style.gap = '8px';
+  leftGroup.appendChild(thumb);
+  leftGroup.appendChild(fileLabel);
+
+  top.appendChild(leftGroup);
+  top.appendChild(delBtn);
+  box.appendChild(top);
+
+  const grid = document.createElement('div');
+  grid.className = 'admin-item-grid';
+
+  const nameF = document.createElement('div');
+  nameF.className = 'field';
+  nameF.innerHTML = '<label>نام آیتم</label>';
+  const nameIn = document.createElement('input');
+  nameIn.type = 'text';
+  nameIn.value = item.name;
+  nameIn.oninput = () => { item.name = nameIn.value; saveData(); };
+  nameF.appendChild(nameIn);
+
+  const priceF = document.createElement('div');
+  priceF.className = 'field';
+  priceF.innerHTML = '<label>قیمت (تومان)</label>';
+  const priceIn = document.createElement('input');
+  priceIn.type = 'text';
+  priceIn.inputMode = 'numeric';
+  priceIn.value = item.price;
+  priceIn.oninput = () => { item.price = priceIn.value.replace(/[^\d]/g,''); saveData(); };
+  priceF.appendChild(priceIn);
+
+  grid.appendChild(nameF);
+  grid.appendChild(priceF);
+  box.appendChild(grid);
+
+  const descF = document.createElement('div');
+  descF.className = 'field';
+  descF.style.marginTop = '4px';
+  descF.innerHTML = '<label>توضیح کوتاه (اختیاری)</label>';
+  const descIn = document.createElement('input');
+  descIn.type = 'text';
+  descIn.value = item.desc || '';
+  descIn.oninput = () => { item.desc = descIn.value; saveData(); };
+  descF.appendChild(descIn);
+  box.appendChild(descF);
+
+  return box;
+}
+
+function addCategory(){
+  data.categories.push({ id: cid(), name: 'دسته‌بندی جدید', items: [] });
+  saveData();
+  renderAdmin();
+}
+
+/* ================= EXPORT FILE ================= */
+function exportFile(){
+  // hide any open modals so the exported file doesn't open with a modal showing
+  const openModals = Array.from(document.querySelectorAll('.modal-overlay.show'));
+  openModals.forEach(m => m.classList.remove('show'));
+
+  let html = document.documentElement.outerHTML;
+
+  const jsonStr = JSON.stringify(data, null, 2);
+  html = html.replace(
+    /\/\*DEFAULT_DATA_START\*\/[\s\S]*?\/\*DEFAULT_DATA_END\*\//,
+    '/*DEFAULT_DATA_START*/' + jsonStr + '/*DEFAULT_DATA_END*/'
+  );
+
+  // restore modal state on screen
+  openModals.forEach(m => m.classList.add('show'));
+
+  const blob = new Blob(['<!DOCTYPE html>\n' + html], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'index.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('فایل به‌روزشده دانلود شد');
+}
+
+/* ================= TOAST ================= */
+let toastTimer;
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+/* ================= INIT ================= */
+renderMenu();
+
+// close modals when tapping outside the box
+document.querySelectorAll('.modal-overlay').forEach(ov => {
+  ov.addEventListener('click', (e) => {
+    if(e.target === ov) ov.classList.remove('show');
+  });
+});
+</script>
+
+
+</body></html>
